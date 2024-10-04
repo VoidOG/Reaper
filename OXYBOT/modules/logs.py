@@ -26,29 +26,28 @@ async def logs(legend):
         # Get number of SUDO Users
         total_users = len(SUDO_USERS)
 
-        log_content = "🔧 **Bot & VPS Status** 🔧\n\n"
-        log_content += f"🕒 **Bot Uptime:** `{hours}h {minutes}m {seconds}s`\n"
-        log_content += f"💻 **CPU Usage:** `{cpu_usage}%`\n"
-        log_content += f"🧠 **Memory Usage:** `{memory_info.percent}%`\n"
-        log_content += f"📦 **Disk Usage:** `{disk_usage.percent}%`\n"
-        log_content += f"👥 **Number of Users Using the Bot:** `{total_users}`\n"
-        log_content += f"🔑 **Number of SUDO Users:** `{total_users}`\n\n"
+        log_content = "🔧 𝖵𝖯𝖲 𝖲𝗍𝖺𝗍𝗎𝗌 🔧\n\n"
+        log_content += f" 𝖡𝗈𝗍 𝖴𝗉𝗍𝗂𝗆𝖾: `{hours}h {minutes}m {seconds}s`\n"
+        log_content += f" 𝖢𝖯𝖴 𝖴𝗌𝖺𝗀𝖾: `{cpu_usage}%`\n"
+        log_content += f" 𝖬𝖾𝗆𝗈𝗋𝗒 𝖴𝗌𝖺𝗀𝖾: `{memory_info.percent}%`\n"
+        log_content += f" 𝖣𝗂𝗌𝗄 𝖴𝗌𝖺𝗀𝖾: `{disk_usage.percent}%`\n"
+        log_content += f" 𝖭𝗎𝗆𝖻𝖾𝗋 𝗈𝖿 𝖲𝖴𝖣𝖮 𝖴𝗌𝖾𝗋𝗌: `{total_users}`\n\n"
 
         # Add current timestamp
-        log_content += f"🗓️ **Timestamp:** `{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}`\n\n"
+        log_content += f"𝖳𝗂𝗆𝖾𝗌𝗍𝖺𝗆𝗉: `{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}`\n\n"
 
         # Adding SUDO Users with profile links
-        log_content += "**🔹 SUDO Users:**\n"
+        log_content += "⦿ 𝖲𝖴𝖣𝖮 𝖴𝗌𝖾𝗋𝗌:\n"
         for user_id in SUDO_USERS:
-            user_profile_link = f"https://t.me/{user_id}"
+            user_profile_link = f"tg://openmessage?user_id={user_id}"
             log_content += f"• [{user_id}]({user_profile_link})\n"
 
         # Send the logs to the log group
         try:
             await X1.send_message(LOG_GROUP_ID, log_content)
-            await fetch.edit("✅ **Logs sent to the log group successfully!**")
+            await fetch.edit("𝖫𝗈𝗀𝗌 𝗌𝖾𝗇𝗍 𝗍𝗈 𝗍𝗁𝖾 𝗅𝗈𝗀 𝗀𝗋𝗈𝗎𝗉 𝗌𝗎𝖼𝖼𝖾𝗌𝗌𝖿𝗎𝗅𝗅𝗒!!")
         except Exception as e:
             await fetch.edit(f"❌ **An Exception Occurred!**\n\n**ERROR:** {str(e)}")
 
     elif legend.sender_id in SUDO_USERS:
-        await legend.reply("🚫 » ꜱᴏʀʀʏ, ᴏɴʟʏ ᴏᴡɴᴇʀ ᴄᴀɴ ᴀᴄᴄᴇꜱꜱ ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ.")
+        await legend.reply("🚫 » 𝖮𝗇𝗅𝗒 𝖮𝗐𝗇𝖾𝗋 𝖼𝖺𝗇 𝖺𝖼𝖼𝖾𝗌𝗌 𝗍𝗁𝗂𝗌 𝖼𝗈𝗆𝗆𝖺𝗇𝖽!!")
