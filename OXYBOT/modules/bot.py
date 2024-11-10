@@ -21,10 +21,10 @@ from datetime import datetime
 async def ping(e):
     if e.sender_id in SUDO_USERS:
         start = datetime.now()
-        jarvis = await e.reply(f"ʀᴇᴀᴘᴇʀ ɪꜱ ʀᴇᴀᴅʏ ᴛᴏ ʀᴇᴀᴘ ᴇᴠᴇʀʏᴏɴᴇ")
+        jarvis = await e.reply(f"ʀᴇᴀᴘᴇʀ ɪꜱ ʀᴇᴀᴅʏ ᴛᴏ ʀᴀᴘᴇ ᴇᴠᴇʀʏᴏɴᴇ")
         end = datetime.now()
         mp = (end - start).microseconds / 1000
-        await jarvis.edit(f"[ʀᴇᴀᴘᴇʀ ɪꜱ ʀᴇᴀᴅʏ ᴛᴏ ʀᴇᴀᴘ ᴇᴠᴇʀʏᴏɴᴇ 👾](https://t.me/Reaper_Support)\n» `{mp} ᴍꜱ`")
+        await jarvis.edit(f"[ʀᴇᴀᴘᴇʀ ɪꜱ ʀᴇᴀᴅʏ ᴛᴏ ʀᴀᴘᴇ ᴇᴠᴇʀʏᴏɴᴇ 👾](https://t.me/Reaper_Support)\n» `{mp} ᴍꜱ`")
 
 
 @X1.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
@@ -104,7 +104,7 @@ async def addsudo(event):
         if HEROKU_APP_NAME is not None:
             app = Heroku.app(HEROKU_APP_NAME)
         else:
-            await ok.edit("`[HEROKU]:" "\nPlease Setup Your` **HEROKU_APP_NAME**")
+            await ok.edit("`[HEROKU]:" "\nᴘʟᴇᴀꜱᴇ ꜱᴇᴛ ᴜᴘ ʏᴏᴜʀ` HEROKU_APP_NAME")
             return
         heroku_var = app.config()
         if event is None:
@@ -113,7 +113,7 @@ async def addsudo(event):
             reply_msg = await event.get_reply_message()
             target = reply_msg.sender_id
         except:
-            await ok.edit("» 𝗥𝗘𝗣𝗟𝗬 𝗢𝗡 𝗨𝗦𝗘𝗥 !!")
+            await ok.edit("» ʀᴇᴘʟʏ ᴏɴ ᴜꜱᴇʀ !!")
             return
 
         if str(target) in sudousers:
@@ -157,16 +157,16 @@ async def removesudo(event):
             reply_msg = await event.get_reply_message()
             target = reply_msg.sender_id
         except:
-            await ok.edit("Reply to a message to remove the user.")
+            await ok.edit("ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇꜱꜱᴀɢᴇ ᴛᴏ ʀᴇᴍᴏᴠᴇ ᴛʜᴇ ꜱᴜᴅᴏ.")
             return
         if str(target) not in sudousers:
-            await ok.edit("User is not in the sudo list.")
+            await ok.edit("ᴜꜱᴇʀ ɪꜱ ɴᴏᴛ ɪɴ ᴛʜᴇ ꜱᴜᴅᴏ ʟɪꜱᴛ.")
         else:
             new_sudo_users = " ".join([user for user in sudousers.split() if user != str(target)])
-            await ok.edit(f"Removed sudo user: `{target}`")
+            await ok.edit(f"ʀᴇᴍᴏᴠᴇᴅ ꜱᴜᴅᴏ ᴜꜱᴇʀ: `{target}`")
             heroku_var["SUDO_USERS"] = new_sudo_users
     else:
-        await event.reply("𝗢𝗡𝗟𝗬 𝗢𝗪𝗡𝗘𝗥 𝗖𝗔𝗡 𝗥𝗘𝗠𝗢𝗩𝗘 𝗦𝗨𝗗𝗢 𝗨𝗦𝗘𝗥𝗦.")
+        await event.reply("ᴏɴʟʏ ᴏᴡɴᴇʀ ᴄᴀɴ ʀᴇᴍᴏᴠᴇ ꜱᴜᴅᴏ ᴜꜱᴇʀ")
 
 @X1.on(events.NewMessage(incoming=True, pattern=r"\%ssudos(?: |$)(.*)" % hl))
 @X2.on(events.NewMessage(incoming=True, pattern=r"\%ssudos(?: |$)(.*)" % hl))
@@ -180,9 +180,9 @@ async def removesudo(event):
 @X10.on(events.NewMessage(incoming=True, pattern=r"\%ssudos(?: |$)(.*)" % hl))
 async def show_sudo_users(event):
     if event.sender_id == OWNER_ID:
-        sudo_users_list = "Reaper Current Sudo users list:\n"
+        sudo_users_list = "ʀᴇᴀᴘᴇʀ ᴄᴜʀʀᴇɴᴛ ꜱᴜᴅᴏ ᴜꜱᴇʀ:\n"
         for user_id in SUDO_USERS:
             sudo_users_list += f"- {user_id}\n"
         await event.reply(sudo_users_list)
     else:
-        await event.reply("**Only For [Cenzo](https://t.me/Cenzeo).**")
+        await event.reply("ᴏɴʟʏ ꜰᴏʀ [Cenzo](https://t.me/Cenzeo).")
