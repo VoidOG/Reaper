@@ -1,114 +1,99 @@
 import sys
-import heroku3
 from pymongo import MongoClient
-from config import (
-    X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, OWNER_ID, MONGO_DB_URL, CMD_HNDLR as hl
-)
+from config import X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, OWNER_ID, CMD_HNDLR as hl
 from os import execl
 from telethon import events
 from datetime import datetime
 
-# MongoDB Client
-client = MongoClient(MONGO_DB_URL)
-db = client["reaper_bot"]
-sudo_collection = db["sudo_users"]
+# MongoDB connection
+mongo_client = MongoClient("mongodb+srv://Cenzo:Cenzo123@cenzo.azbk1.mongodb.net/")  # Adjust MongoDB URI if needed
+db = mongo_client['bot_database']
+sudo_users_collection = db['sudo_users']
 
+# Function to get current sudo users from MongoDB
 def get_sudo_users():
-    """Fetch sudo users from MongoDB."""
-    sudo_users = sudo_collection.find_one({"_id": "sudo_list"})
-    return sudo_users.get("users", []) if sudo_users else []
+    sudo_users = sudo_users_collection.find_one({"_id": "sudo_users"})
+    if sudo_users:
+        return sudo_users.get('users', [])
+    return []
 
-def add_sudo_user(user_id):
-    """Add a new sudo user to MongoDB."""
-    sudo_collection.update_one(
-        {"_id": "sudo_list"},
-        {"$addToSet": {"users": user_id}},
+# Function to update sudo users in MongoDB
+def update_sudo_users(users):
+    sudo_users_collection.update_one(
+        {"_id": "sudo_users"},
+        {"$set": {"users": users}},
         upsert=True
     )
 
-def remove_sudo_user(user_id):
-    """Remove a sudo user from MongoDB."""
-    sudo_collection.update_one(
-        {"_id": "sudo_list"},
-        {"$pull": {"users": user_id}}
-    )
 
-# List of clients
-clients = [X1, X2, X3, X4, X5, X6, X7, X8, X9, X10]
-
-def register_command(clients, pattern, handler):
-    """Register a command across multiple clients."""
-    for client in clients:
-        client.add_event_handler(handler, events.NewMessage(incoming=True, pattern=pattern))
-
-# Ping Command
+@X1.on(events.NewMessage(incoming=True, pattern=r"\%sping(?: |$)(.*)" % hl))
 async def ping(e):
     if e.sender_id in get_sudo_users():
         start = datetime.now()
-        jarvis = await e.reply("ʀᴇᴀᴘᴇʀ ɪꜱ ʀᴇᴀᴅʏ ᴛᴏ ʀᴀᴘᴇ ᴇᴠᴇʀʏᴏɴᴇ")
+        jarvis = await e.reply(f"REAPER")
         end = datetime.now()
         mp = (end - start).microseconds / 1000
-        await jarvis.edit(f"[ʀᴇᴀᴘᴇʀ ɪꜱ ʀᴇᴀᴅʏ ᴛᴏ ʀᴀᴘᴇ ᴇᴠᴇʀʏᴏɴᴇ 👾](https://t.me/Reaper_Support)\n» `{mp} ᴍꜱ`")
+        await jarvis.edit(f"[ʀᴇᴀᴘᴇʀ ɪꜱ ʀᴇᴀᴅʏ ᴛᴏ ʀᴇᴀᴘ ᴇᴠᴇʀʏᴏɴᴇ 👾](https://t.me/reaper_support)\n» `{mp} ᴍꜱ`")
 
-register_command(clients, rf"{hl}sudos(?: |$)(.*)", ping)
 
-# Reboot Command
+@X1.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
 async def restart(e):
     if e.sender_id in get_sudo_users():
-        await e.reply("Reaper is starting...")
-        # Disconnect clients before restarting
-        for client in clients:
-            try:
-                await client.disconnect()
-            except Exception:
-                pass
+        await e.reply(f"Reaper is starting.....")
         execl(sys.executable, sys.executable, *sys.argv)
 
-register_command(clients, rf"{hl}restart(?: |$)(.*)", restart)
 
-# Add Sudo Command
+@X1.on(events.NewMessage(incoming=True, pattern=r"\%ssudo(?: |$)(.*)" % hl))
 async def addsudo(event):
     if event.sender_id == OWNER_ID:
-        reply_msg = await event.get_reply_message()
-        if reply_msg:
-            target_id = reply_msg.sender_id
-            if target_id not in get_sudo_users():
-                add_sudo_user(target_id)
-                await event.reply(f"New sudo user added: `{target_id}`")
-            else:
-                await event.reply("User is already a sudo user.")
+        ok = await event.reply(f"New Sudo User added")
+        target = ""
+        try:
+            reply_msg = await event.get_reply_message()
+            target = reply_msg.sender_id
+        except:
+            await ok.edit("Reply on user  !!")
+            return
+
+        sudo_users = get_sudo_users()
+        if str(target) in sudo_users:
+            await ok.edit(f"Reaper Sudo User !!")
         else:
-            await event.reply("Reply to a user's message to add them as sudo.")
+            sudo_users.append(str(target))
+            update_sudo_users(sudo_users)
+            await ok.edit(f"» **New Sudo User**: `{target}`")
+
     else:
-        await event.reply("Only the owner can add sudo users.")
+        await event.reply("Only Owner can give sudo")
 
-register_command(clients, rf"{hl}addsudo(?: |$)(.*)", addsudo)
 
-# Remove Sudo Command
+@X1.on(events.NewMessage(incoming=True, pattern=r"\%sremovesudo(?: |$)(.*)" % hl))
 async def removesudo(event):
     if event.sender_id == OWNER_ID:
-        reply_msg = await event.get_reply_message()
-        if reply_msg:
-            target_id = reply_msg.sender_id
-            if target_id in get_sudo_users():
-                remove_sudo_user(target_id)
-                await event.reply(f"Sudo user removed: `{target_id}`")
-            else:
-                await event.reply("User is not in the sudo list.")
+        ok = await event.reply(f"Lund Chusle Owner ka...")
+        target = ""
+        try:
+            reply_msg = await event.get_reply_message()
+            target = reply_msg.sender_id
+        except:
+            await ok.edit("Reply to a message to remove the user.")
+            return
+        
+        sudo_users = get_sudo_users()
+        if str(target) not in sudo_users:
+            await ok.edit("User is not in the sudo list.")
         else:
-            await event.reply("Reply to a user's message to remove them from sudo.")
+            sudo_users.remove(str(target))
+            update_sudo_users(sudo_users)
+            await ok.edit(f"Removed sudo user: `{target}`")
+
     else:
-        await event.reply("Only the owner can remove sudo users.")
+        await event.reply("Only owner can remove sudo users.")
 
-register_command(clients, rf"{hl}removesudo(?: |$)(.*)", removesudo)
 
-# List Sudo Users
-async def list_sudos(event):
+@X1.on(events.NewMessage(incoming=True, pattern=r"\%ssudolist(?: |$)(.*)" % hl))
+async def sudolist(event):
     if event.sender_id in get_sudo_users():
         sudo_users = get_sudo_users()
-        users_list = "\n".join([f"- `{user}`" for user in sudo_users])
-        await event.reply(f"Current sudo users:\n{users_list}")
-    else:
-        await event.reply("Only sudo users can view the sudo list.")
-
-register_command(clients, rf"{hl}listsudos(?: |$)(.*)", list_sudos)
+        sudo_list = "\n".join(sudo_users) if sudo_users else "No sudo users found."
+        await event.reply(f"**Sudo Users List**:\n{sudo_list}")
