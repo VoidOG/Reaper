@@ -143,7 +143,7 @@ async def removesudo(event):
     if event.sender_id == OWNER_ID:
         Heroku = heroku3.from_key(HEROKU_API_KEY)
         sudousers = getenv("SUDO_USERS", default=None)
-        ok = await event.reply(f" 𝗡𝗜𝗞𝗔𝗟 𝗗𝗜𝗬𝗔 𝗠𝗔𝗗𝗥𝗖𝗛𝗢𝗗 𝗞𝗢...")
+        ok = await event.reply(f" ʟᴜɴᴅ ᴄʜᴜꜱ ʟᴇ ᴏᴡɴᴇʀ ᴋᴀ")
         target = ""
         if HEROKU_APP_NAME is not None:
             app = Heroku.app(HEROKU_APP_NAME)
@@ -160,13 +160,13 @@ async def removesudo(event):
             await ok.edit("Reply to a message to remove the user.")
             return
         if str(target) not in sudousers:
-            await ok.edit("User is not in the sudo list.")
+            await ok.edit("ᴜꜱᴇʀ ɪꜱ ɴᴏᴛ ɪɴ ᴛʜᴇ ꜱᴜᴅᴏ ʟɪꜱᴛ.")
         else:
             new_sudo_users = " ".join([user for user in sudousers.split() if user != str(target)])
             await ok.edit(f"Removed sudo user: `{target}`")
             heroku_var["SUDO_USERS"] = new_sudo_users
     else:
-        await event.reply("𝗢𝗡𝗟𝗬 𝗢𝗪𝗡𝗘𝗥 𝗖𝗔𝗡 𝗥𝗘𝗠𝗢𝗩𝗘 𝗦𝗨𝗗𝗢 𝗨𝗦𝗘𝗥𝗦.")
+        await event.reply("ᴏɴʟʏ ᴏᴡɴᴇʀ ᴄᴀɴ ʀᴇᴍᴏᴠᴇ ꜱᴜᴅᴏ")
 
 @X1.on(events.NewMessage(incoming=True, pattern=r"\%ssudos(?: |$)(.*)" % hl))
 @X2.on(events.NewMessage(incoming=True, pattern=r"\%ssudos(?: |$)(.*)" % hl))
@@ -180,9 +180,9 @@ async def removesudo(event):
 @X10.on(events.NewMessage(incoming=True, pattern=r"\%ssudos(?: |$)(.*)" % hl))
 async def show_sudo_users(event):
     if event.sender_id == OWNER_ID:
-        sudo_users_list = "𝕆𝕩𝕪𝕘𝕖𝕟 ꭙ 𝕊𝕡𝕒𝕞🫧 𝗖𝗨𝗥𝗥𝗘𝗡𝗧 𝗦𝗨𝗗𝗢 𝗨𝗦𝗘𝗥𝗦 𝗟𝗜𝗦𝗧:\n"
+        sudo_users_list = "ʀᴇᴀᴘᴇʀ ᴄᴜʀʀᴇɴᴛ ꜱᴜᴅᴏ ʟɪꜱᴛ:\n"
         for user_id in SUDO_USERS:
             sudo_users_list += f"- {user_id}\n"
         await event.reply(sudo_users_list)
     else:
-        await event.reply("🇴𝗡𝗟𝗬 𝗙𝗢𝗥 𝕆𝕩𝕪𝕘𝕖𝕟 ꭙ 𝕊𝕡𝕒𝕞🫧 𝗢𝗪𝗡𝗘𝗥.")
+        await event.reply("ᴏɴʟʏ [ᴄᴇɴᴢᴏ](https://t.me/cenzeo) ᴄᴀɴ ᴀᴄᴄᴇꜱꜱ ᴛʜɪꜱ.")
