@@ -9,7 +9,7 @@ from telethon import events
 from datetime import datetime
 
 # MongoDB Client
-client = MongoClient(MONGO_DB_URI)
+client = MongoClient(MONGO_DB_URL)
 db = client["reaper_bot"]
 sudo_collection = db["sudo_users"]
 
