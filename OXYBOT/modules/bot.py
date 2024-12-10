@@ -40,7 +40,7 @@ async def ping(e):
 @X9.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
 @X10.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
 async def restart(e):
-    if e.sender_id in SUDO_USERS:
+    if e.sender_id in OWNER_ID:
         await e.reply("`ʀᴇᴀᴘᴇʀ ɪꜱ ʀᴇꜱᴛᴀʀᴛɪɴɢ...`")
 
         # Gracefully disconnect all clients
