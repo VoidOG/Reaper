@@ -1,5 +1,7 @@
 import sys
 import heroku3
+import asyncio
+import os
 
 from config import X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, OWNER_ID, SUDO_USERS, HEROKU_APP_NAME, HEROKU_API_KEY, CMD_HNDLR as hl
 from config import SUDO_USERS
@@ -39,49 +41,21 @@ async def ping(e):
 @X10.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
 async def restart(e):
     if e.sender_id in SUDO_USERS:
-        await e.reply(f"`ʀᴇᴀᴘᴇʀ ɪꜱ ꜱᴛᴀʀᴛɪɴɢ.`")
-        try:
-            await X1.disconnect()
-        except Exception:
-            pass
-        try:
-            await X2.disconnect()
-        except Exception:
-            pass
-        try:
-            await X3.disconnect()
-        except Exception:
-            pass
-        try:
-            await X4.disconnect()
-        except Exception:
-            pass
-        try:
-            await X5.disconnect()
-        except Exception:
-            pass
-        try:
-            await X6.disconnect()
-        except Exception:
-            pass
-        try:
-            await X7.disconnect()
-        except Exception:
-            pass
-        try:
-            await X8.disconnect()
-        except Exception:
-            pass
-        try:
-            await X9.disconnect()
-        except Exception:
-            pass
-        try:
-            await X10.disconnect()
-        except Exception:
-            pass
+        await e.reply("`ʀᴇᴀᴘᴇʀ ɪꜱ ʀᴇꜱᴛᴀʀᴛɪɴɢ...`")
 
-        execl(sys.executable, sys.executable, *sys.argv)
+        # Gracefully disconnect all clients
+        clients = [X1, X2, X3, X4, X5, X6, X7, X8, X9, X10]
+        for client in clients:
+            try:
+                await client.disconnect()
+            except Exception as ex:
+                print(f"Error disconnecting client: {ex}")
+
+        # Wait a moment to ensure disconnection
+        await asyncio.sleep(2)
+
+        # Restart the script
+        os.execv(sys.executable, [sys.executable] + sys.argv)
 
 
 @X1.on(events.NewMessage(incoming=True, pattern=r"\%ssudo(?: |$)(.*)" % hl))
