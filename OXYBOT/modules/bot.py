@@ -29,35 +29,6 @@ async def ping(e):
         await jarvis.edit(f"[ʀᴇᴀᴘᴇʀ ɪꜱ ʀᴇᴀᴅʏ ᴛᴏ ʀᴀᴘᴇ ᴇᴠᴇʀʏᴏɴᴇ 👾](https://t.me/Reaper_Support)\n» `{mp} ᴍꜱ`")
 
 
-@X1.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
-@X2.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
-@X3.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
-@X4.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
-@X5.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
-@X6.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
-@X7.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
-@X8.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
-@X9.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
-@X10.on(events.NewMessage(incoming=True, pattern=r"\%sreboot(?: |$)(.*)" % hl))
-async def restart(e):
-    if e.sender_id in OWNER_ID:
-        await e.reply("`ʀᴇᴀᴘᴇʀ ɪꜱ ʀᴇꜱᴛᴀʀᴛɪɴɢ...`")
-
-        # Gracefully disconnect all clients
-        clients = [X1, X2, X3, X4, X5, X6, X7, X8, X9, X10]
-        for client in clients:
-            try:
-                await client.disconnect()
-            except Exception as ex:
-                print(f"Error disconnecting client: {ex}")
-
-        # Wait a moment to ensure disconnection
-        await asyncio.sleep(2)
-
-        # Restart the script
-        os.execv(sys.executable, [sys.executable] + sys.argv)
-
-
 @X1.on(events.NewMessage(incoming=True, pattern=r"\%ssudo(?: |$)(.*)" % hl))
 @X2.on(events.NewMessage(incoming=True, pattern=r"\%ssudo(?: |$)(.*)" % hl))
 @X3.on(events.NewMessage(incoming=True, pattern=r"\%ssudo(?: |$)(.*)" % hl))
